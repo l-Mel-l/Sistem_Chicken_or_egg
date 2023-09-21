@@ -1,39 +1,49 @@
+class Chicken implements Runnable {
+    public void run() {
+        for (int i = 0; i < 5; i++) {
+            ChickenOrEgg.lastWord = "Курица";
+            System.out.println(ChickenOrEgg.lastWord);
+            try {
+                Thread.sleep(1000);
+            }
+            catch (InterruptedException e) {
+                break;
+            }
+        }
+    }
+}
+
+class Egg implements Runnable {
+    public void run() {
+        for (int i = 0; i < 5; i++) {
+            ChickenOrEgg.lastWord = "Яйцо";
+            System.out.println(ChickenOrEgg.lastWord);
+            try {
+                Thread.sleep(1000);
+            }
+            catch (InterruptedException e) {
+                break;
+            }
+        }
+    }
+}
+
 public class ChickenOrEgg {
-    public static void main(String[] args) throws InterruptedException {
-        Thread chickenThread = new Thread(() -> {
-            for (int i = 0; i < 5; i++) {
-                System.out.println("Курица");
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+    public static String lastWord = "";
+    public static void main(String[] args) {
+        Thread chicken = new Thread(new Chicken());
+        Thread egg = new Thread(new Egg());
+        chicken.start();
+        egg.start();
+        for (int i = 0; i < 5; i++) {
+            try {
+                Thread.sleep(1000);
             }
-        });
-
-        Thread eggThread = new Thread(() -> {
-            for (int i = 0; i < 5; i++) {
-                System.out.println("Яйцо");
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            catch (InterruptedException e) {
+                break;
             }
-        });
-
-        chickenThread.start();
-        eggThread.start();
-
-        while (chickenThread.isAlive() || eggThread.isAlive()) {
-            Thread.sleep(100);
         }
-
-        System.out.println("Спор окончен!");
-        if (chickenThread.isAlive()) {
-            System.out.println("Победила курица!");
-        } else {
-            System.out.println("Победило яйцо!");
-        }
+        System.out.println("Спор Окночен!");
+        System.out.println(lastWord + " - это последнее слово");
     }
 }
